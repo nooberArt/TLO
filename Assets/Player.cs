@@ -15,6 +15,9 @@ public class Player : NetworkBehaviour {
     public int disconnected = 0;
 
     public GameObject opponentPlayer;
+    public bool requestedRematch = false;
+    public bool acceptedRematch = false;
+    bool changedText = false;
 
     void Start() {
         gw = FindObjectOfType<GameWorld>().GetComponent<GameWorld>();
@@ -50,6 +53,43 @@ public class Player : NetworkBehaviour {
             {
                 TargetOpponent();
             }
+        }
+
+        if (opponentPlayer != null)
+        {
+            if (opponentPlayer.GetComponent<Player>().requestedRematch && !changedText)
+            {
+                changedText = true;
+                GameObject.FindGameObjectWithTag("EndText").GetComponent<Text>().text = "ACCEPT?";
+            }
+            if (requestedRematch && opponentPlayer.GetComponent<Player>().acceptedRematch)
+            {
+                requestedRematch = false;
+                changedText = false;
+                gw.GetComponent<GameWorld>().Restart();
+            }
+            else if(acceptedRematch){
+                acceptedRematch = false;
+                changedText = false;
+                gw.GetComponent<GameWorld>().Restart();
+            }
+        }
+    }
+
+    public void DoRematch()
+    {
+        if (opponentPlayer == null)
+        {
+            opponentPlayer = GameObject.Find("Player(Clone)");
+        }
+        if (!opponentPlayer.GetComponent<Player>().requestedRematch)
+        {
+            GameObject.FindGameObjectWithTag("EndText").GetComponent<Text>().text = "WAITING";
+            CmdRequestRematch();
+        }
+        else
+        {
+            CmdAcceptRematch();
         }
     }
 
@@ -104,6 +144,30 @@ public class Player : NetworkBehaviour {
     [ClientRpc]
     public void RpcDeleteInMove(string tag, float thisPos, float lastPos) {
         gw.buttonList[int.Parse(tag)].GetComponent<Square>().DeleteInMove(thisPos, lastPos);
+    }
+
+    [Command]
+    public void CmdRequestRematch()
+    {
+        RpcRequestRematch();
+    }
+
+    [ClientRpc]
+    public void RpcRequestRematch()
+    {
+        requestedRematch = true;
+    }
+
+    [Command]
+    public void CmdAcceptRematch()
+    {
+        RpcAcceptRematch();
+    }
+
+    [ClientRpc]
+    public void RpcAcceptRematch()
+    {
+        acceptedRematch = true;
     }
 
     [Command]

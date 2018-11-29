@@ -19,10 +19,10 @@ public class ButtonManager : MonoBehaviour, IPointerUpHandler {
     public GameObject backButton;
 
     public void Awake() {
-        if(PlayerPrefs.GetInt("Sound") == 1) 
-            GetComponent<Image>().sprite = normalSprite;
-        else if(PlayerPrefs.GetInt("Sound") == 0)
-            GetComponent<Image>().sprite = pressedSprite;
+        //if(PlayerPrefs.GetInt("Sound") == 1) 
+        //    GetComponent<Image>().sprite = normalSprite;
+        //else if(PlayerPrefs.GetInt("Sound") == 0)
+        //    GetComponent<Image>().sprite = pressedSprite;
     }
 
     public void Update() {

@@ -76,8 +76,6 @@ public class GameWorld : NetworkBehaviour {
 
     }
 
-
-
     public void Update() {
         for (int i = 0; i < syncList.Count; i++) {
             if (syncList[i] == i) {
@@ -226,7 +224,7 @@ public class GameWorld : NetworkBehaviour {
     }
 
     public void GameOver() {
-
+        
         if (sumOfAlones % 2 == 0) {
             if (playerSide == firstSprite) {
                 gameOverText.text = "RED WINS";
@@ -250,17 +248,17 @@ public class GameWorld : NetworkBehaviour {
         }
 
 
-        if (!client && blueWin) {
-            DataPersistence.data.exp += 10;
-            DataPersistence.data.Save();
-            DataPersistence.data.Load();
-            expButton.GetComponentInChildren<Text>().text = "EXP: " + DataPersistence.data.exp.ToString();
-        } else if (client && !blueWin) {
-            DataPersistence.data.exp += 10;
-            DataPersistence.data.Save();
-            DataPersistence.data.Load();
-            expButton.GetComponentInChildren<Text>().text = "EXP: " + DataPersistence.data.exp.ToString();
-        }
+        //if (!client && blueWin) {
+        //    DataPersistence.data.exp += 10;
+        //    DataPersistence.data.Save();
+        //    DataPersistence.data.Load();
+        //    expButton.GetComponentInChildren<Text>().text = "EXP: " + DataPersistence.data.exp.ToString();
+        //} else if (client && !blueWin) {
+        //    DataPersistence.data.exp += 10;
+        //    DataPersistence.data.Save();
+        //    DataPersistence.data.Load();
+        //    expButton.GetComponentInChildren<Text>().text = "EXP: " + DataPersistence.data.exp.ToString();
+        //}
 
         isGameOver = true;
         canPlay = false;
@@ -324,10 +322,28 @@ public class GameWorld : NetworkBehaviour {
             buttonList[i].transform.localPosition = startPositions[i];
         }
 
-        //ko igra prvi 
+        ////ko igra prvi 
         blueTake = (playerSide == firstSprite) ? true : false;
         playerSide = blueFirst ? secondSprite : firstSprite;
         blueFirst = !blueFirst;
+
+        //marin mjenjo
+        //if (blueWin)
+        //{
+        //    blueTake = true;
+        //    playerSide = firstSprite;
+        //    blueFirst = false;
+
+        //    blueWin = false;
+        //}
+        //else
+        //{
+        //    blueTake = true;
+        //    playerSide = secondSprite;
+        //    blueFirst = true;
+    //}
+
+
         //treba li se banner mjenjati
         if ((blueTake && !blueFirst) || (!blueTake && blueFirst))
             bannerChange = true;
